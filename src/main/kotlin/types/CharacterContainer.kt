@@ -31,4 +31,10 @@ open class CharacterContainer (
         chars.replaceAll( { MutableList(initialWidth) { ' ' } } )
         styles.replaceAll( { MutableList(initialWidth) { 0 } } )
     }
+
+    override fun toString(): String {
+        return chars.joinToString("\n") { row ->
+            row.joinToString("") { it.toString() }
+        }
+    }
 }

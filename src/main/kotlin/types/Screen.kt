@@ -35,10 +35,4 @@ class Screen (
             index -= 1
         }
     }
-
-    override fun toString(): String {
-        return chars.joinToString("\n") { row ->
-            row.joinToString("") { it.toString() }
-        }
-    }
 }

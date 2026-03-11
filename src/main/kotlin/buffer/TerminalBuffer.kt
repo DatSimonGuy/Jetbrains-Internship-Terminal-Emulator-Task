@@ -108,6 +108,14 @@ class TerminalBuffer(
         screen.clear()
     }
 
+    fun getScreen(): String {
+        return screen.toString()
+    }
+
+    fun getScreenAndScrollback(): String {
+        return scrollback.toString() + "\n" + screen.toString()
+    }
+
     fun clearScreenAndScrollback() {
         screen.clear()
         scrollback.clear()
