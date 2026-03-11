@@ -8,7 +8,7 @@ class Screen (
     private var width = initialSize.first
     private var height = initialSize.second
 
-    private val fields: List<MutableList<Char?>> = List(height) { MutableList(width) { null } }
+    private val fields: MutableList<MutableList<Char?>> = MutableList(height) { MutableList(width) { null } }
 
     fun getCharacter(column: Int, row: Int): Char? {
         try {
@@ -16,7 +16,6 @@ class Screen (
         } catch (e: Exception) {
             return null
         }
-
     }
 
     fun setCharacter(column: Int, row: Int, value: Char) {
@@ -25,6 +24,13 @@ class Screen (
 
     fun setLine(row: Int, value: Char?) {
         fields[row].replaceAll { value }
+    }
+
+    fun addLine(): MutableList<Char?> {
+        val firstRow = fields[0]
+        fields.removeFirst()
+        fields.addLast(MutableList(width) { null })
+        return firstRow
     }
 
     fun shiftRightAt(column: Int, row: Int) {

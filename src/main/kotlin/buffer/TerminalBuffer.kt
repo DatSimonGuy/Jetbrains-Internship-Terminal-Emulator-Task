@@ -18,7 +18,7 @@ class TerminalBuffer(
     private var background: TerminalColor = TerminalColor.DEFAULT
     private val attributes: MutableMap<TextStyle, Boolean> = TextStyle.entries.associateWith { false }.toMutableMap()
     private val screen = Screen(initialSize)
-    private val scrollBack: List<String?> = List(scrollBackSize) { null }
+    private val scrollBack: MutableList<String?> = MutableList(scrollBackSize) { null }
     private var cursorPosition: Pair<Int, Int> = 0 to 0
 
     fun setBackground(color: TerminalColor) {
@@ -73,6 +73,12 @@ class TerminalBuffer(
 
     fun fillLine(char: Char?) {
         screen.setLine(cursorPosition.second, char)
+    }
+
+    fun addNewLine() {
+        val movedLine = screen.addLine()
+        scrollBack.addFirst(movedLine.joinToString("") { it.toString() })
+        scrollBack.removeLast()
     }
 
     override fun toString(): String {
