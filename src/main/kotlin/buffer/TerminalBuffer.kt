@@ -100,7 +100,7 @@ class TerminalBuffer(
     }
 
     fun getScrollbackLine(row: Int): String {
-        return screen.getLine(row)
+        return scrollback.getLine(row)
     }
 
     fun clearScreen() {
@@ -120,16 +120,16 @@ class TerminalBuffer(
         scrollback.clear()
     }
 
-    fun getScreenCharacterAtPosition(column: Int, row: Int): String? {
-        return screen.getFormatted(column, row)
+    fun getScreenCharacterAtPosition(column: Int, row: Int): Char? {
+        return screen.getCharacter(column, row)
     }
 
     fun getScreenAttributesAtPosition(column: Int, row: Int): Triple<List<TextStyle>, TerminalColor, TerminalColor> {
         return maskToStyles(screen.getAttributes(column, row) ?: 0)
     }
 
-    fun getScrollbackCharacterAtPosition(column: Int, row: Int): String? {
-        return scrollback.getFormatted(column, row)
+    fun getScrollbackCharacterAtPosition(column: Int, row: Int): Char? {
+        return scrollback.getCharacter(column, row)
     }
 
     fun getScrollbackAttributesAtPosition(column: Int, row: Int): Triple<List<TextStyle>, TerminalColor, TerminalColor> {
