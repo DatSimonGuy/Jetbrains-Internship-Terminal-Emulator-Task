@@ -3,6 +3,7 @@ package com.internship.buffer
 import com.internship.types.Direction
 import com.internship.types.TerminalColor
 import com.internship.types.TextStyle
+import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
 
@@ -47,8 +48,13 @@ class TerminalBuffer(
     }
 
     fun moveCursor(direction: Direction, amount: Int) {
-        val newColumn = max(min(direction.cMod * amount + cursorPosition.first, size.first-1), 0)
-        val newRow = max(min(direction.rMod * amount + cursorPosition.second, size.second-1), 0)
+        val width = size.first
+        val height = size.second
+        val index = cursorPosition.second * width + cursorPosition.first
+        val delta = direction.rMod * width * amount + direction.cMod * amount
+        val newIndex = (index + delta).coerceIn(0, width * height - 1)
+        val newRow = newIndex / width
+        val newColumn = newIndex % width
         cursorPosition = newColumn to newRow
     }
 }
