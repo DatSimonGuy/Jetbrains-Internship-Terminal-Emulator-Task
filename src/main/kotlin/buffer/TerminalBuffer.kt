@@ -81,6 +81,11 @@ class TerminalBuffer(
         screen.clear()
     }
 
+    fun clearScreenAndScrollback() {
+        screen.clear()
+        scrollback.clear()
+    }
+
     override fun toString(): String {
         return screen.toString()
     }
