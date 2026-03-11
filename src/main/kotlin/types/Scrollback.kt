@@ -10,6 +10,10 @@ class Scrollback(
         fields.removeLast()
     }
 
+    fun getCharacter(column: Int, row: Int): Char? {
+        return fields[row]?.get(row)
+    }
+
     fun clear() {
         fields.replaceAll { null }
     }

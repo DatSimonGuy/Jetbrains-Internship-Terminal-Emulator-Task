@@ -1,6 +1,7 @@
 package com.internship.buffer
 
 import com.internship.types.Direction
+import com.internship.types.Element
 import com.internship.types.Screen
 import com.internship.types.Scrollback
 import com.internship.types.TerminalColor
@@ -84,6 +85,13 @@ class TerminalBuffer(
     fun clearScreenAndScrollback() {
         screen.clear()
         scrollback.clear()
+    }
+
+    fun getCharacterAtPosition(column: Int, row: Int, element: Element): Char? {
+        return when(element) {
+            Element.SCREEN -> screen.getCharacter(column, row)
+            Element.SCROLLBACK -> scrollback.getCharacter(column, row)
+        }
     }
 
     override fun toString(): String {
