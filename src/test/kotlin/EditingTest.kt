@@ -6,7 +6,7 @@ import kotlin.test.assertContains
 
 class EditingTest {
     @Test
-    fun testWrite() {
+    fun writeTextTest() {
         val buffer = TerminalBuffer()
         buffer.writeTextOnLine('r')
         buffer.moveCursor(Direction.LEFT, 1)
@@ -21,7 +21,7 @@ class EditingTest {
     }
 
     @Test
-    fun testInsert() {
+    fun insertTextTest() {
         val buffer = TerminalBuffer()
         val textToWrite = "ołdaceba"
         textToWrite.forEach { c ->
@@ -32,7 +32,7 @@ class EditingTest {
     }
 
     @Test
-    fun testFill() {
+    fun lineFillTest() {
         val width = 20
         val buffer = TerminalBuffer(width to 10)
         buffer.fillLine('a')
@@ -40,7 +40,7 @@ class EditingTest {
     }
 
     @Test
-    fun testNewLine() {
+    fun newLineTest() {
         val width = 20
         val buffer = TerminalBuffer(width to 10)
         buffer.fillLine('a')
@@ -54,5 +54,33 @@ class EditingTest {
             "The first line has not been deleted after adding a new one"
         }
         assertContains(buffer.toString().lines().last(), " ".repeat(width), message = "The new line is not empty")
+    }
+
+    @Test
+    fun clearScreenTest() {
+        val height = 5
+        val buffer = TerminalBuffer(20 to height)
+        repeat(height) {
+            buffer.fillLine('b')
+            buffer.moveCursor(Direction.DOWN, 1)
+        }
+        buffer.clearScreen()
+        assert(!buffer.getScreen().contains('b')) {
+            "The screen is not cleared fully"
+        }
+    }
+
+    @Test
+    fun clearScreenAndScrollBackTest() {
+        val height = 5
+        val buffer = TerminalBuffer(20 to height, height)
+        repeat(height) {
+            buffer.addNewLine()
+            buffer.fillLine('b')
+        }
+        buffer.clearScreenAndScrollback()
+        assert(!buffer.getScreenAndScrollback().contains('b')) {
+            "The screen is not cleared fully"
+        }
     }
 }
