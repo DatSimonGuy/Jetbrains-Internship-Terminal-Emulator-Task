@@ -6,6 +6,7 @@ import com.internship.types.Screen
 import com.internship.types.Scrollback
 import com.internship.types.TerminalColor
 import com.internship.types.TextStyle
+import com.internship.types.stylesToMask
 
 class TerminalBuffer(
     initialSize: Pair<Int, Int> = 80 to 24,
@@ -16,8 +17,10 @@ class TerminalBuffer(
     private var background: TerminalColor = TerminalColor.DEFAULT
     private val attributes: MutableMap<TextStyle, Boolean> = TextStyle.entries.associateWith { false }.toMutableMap()
     private val screen = Screen(initialSize)
-    private val scrollback = Scrollback(scrollBackSize)
+    private val scrollback = Scrollback(scrollBackSize, initialSize.first)
     private var cursorPosition: Pair<Int, Int> = 0 to 0
+
+    private val style get() = stylesToMask(attributes.filter { it.value }.map { it.key })
 
     fun setBackground(color: TerminalColor) {
         background = color
@@ -59,23 +62,37 @@ class TerminalBuffer(
     }
 
     fun writeTextOnLine(char: Char) {
-        screen.setCharacter(cursorPosition.first, cursorPosition.second, char)
+        screen.setCell(
+            cursorPosition.first,
+            cursorPosition.second,
+            char,
+            style
+        )
         moveCursor(Direction.RIGHT, 1)
     }
 
     fun insertTextOnLine(char: Char) {
         screen.shiftRightAt(cursorPosition.first, cursorPosition.second)
-        screen.setCharacter(cursorPosition.first, cursorPosition.second, char)
+        screen.setCell(
+            cursorPosition.first,
+            cursorPosition.second,
+            char,
+            style
+        )
         moveCursor(Direction.RIGHT, 1)
     }
 
     fun fillLine(char: Char) {
-        screen.setLine(cursorPosition.second, char)
+        screen.setLine(
+            cursorPosition.second,
+            char,
+            style
+        )
     }
 
     fun addNewLine() {
-        val movedLine = screen.addLine()
-        scrollback.addLine(movedLine.joinToString("") { it.toString() })
+        val line = screen.addLine()
+        scrollback.addLine(line.first, line.second)
     }
 
     fun clearScreen() {

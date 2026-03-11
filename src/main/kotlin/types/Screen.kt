@@ -1,55 +1,71 @@
 package com.internship.types
 
-import javax.swing.tree.ExpandVetoException
-
 class Screen (
     initialSize: Pair<Int, Int>
 ) {
     private var width = initialSize.first
     private var height = initialSize.second
 
-    private val fields: MutableList<MutableList<Char>> = MutableList(height) { MutableList(width) { ' ' } }
+    private val chars: MutableList<MutableList<Char>> = MutableList(height) { MutableList(width) { ' ' } }
+    private val styles: MutableList<MutableList<Int>> = MutableList(height) { MutableList(width) { 0 } }
 
     fun getCharacter(column: Int, row: Int): Char? {
         return try {
-            fields[row][column]
+            chars[row][column]
         } catch (_: ArrayIndexOutOfBoundsException) {
             null
         }
     }
 
-    fun setCharacter(column: Int, row: Int, value: Char) {
-        fields[row][column] = value
+    fun getAttribute (column: Int, row: Int): Int? {
+        return try {
+            styles[row][column]
+        } catch (_: ArrayIndexOutOfBoundsException) {
+            null
+        }
     }
 
-    fun setLine(row: Int, value: Char) {
-        fields[row].replaceAll { value }
+    fun setCell(column: Int, row: Int, char: Char, style: Int) {
+        chars[row][column] = char
+        styles[row][column] = style
     }
 
-    fun addLine(): MutableList<Char> {
-        val firstRow = fields[0]
-        fields.removeFirst()
-        fields.addLast(MutableList(width) { ' ' })
-        return firstRow
+    fun setLine(row: Int, char: Char, style: Int) {
+        chars[row].replaceAll { char }
+        styles[row].replaceAll { style }
+    }
+
+    fun addLine(): Pair<MutableList<Char>, MutableList<Int>> {
+        val firstRow = chars[0]
+        val firstStyles = styles[0]
+        chars.removeFirst()
+        styles.removeFirst()
+        chars.addLast(MutableList(width) { ' ' })
+        styles.addLast(MutableList(width) { 0 })
+        return firstRow to firstStyles
     }
 
     fun clear() {
-        fields.forEach {
+        chars.forEach {
             it.replaceAll { ' ' }
+        }
+        styles.forEach {
+            it.replaceAll { 0 }
         }
     }
 
     fun shiftRightAt(column: Int, row: Int) {
         var index = (height-1) * width + width-1
         while ((index % width) > column || (index / width) > row) {
-            val previousValue = getCharacter((index-1)%width, (index-1)/width)
-            setCharacter(index % width, index / width, previousValue!!)
+            val prevChar = getCharacter((index-1)%width, (index-1)/width)
+            val prevAttr = getAttribute((index-1)%width, (index-1)/width)
+            setCell(index % width, index / width, prevChar!!, prevAttr!!)
             index -= 1
         }
     }
 
     override fun toString(): String {
-        return fields.joinToString("\n") { row ->
+        return chars.joinToString("\n") { row ->
             row.joinToString("") { it.toString() }
         }
     }
