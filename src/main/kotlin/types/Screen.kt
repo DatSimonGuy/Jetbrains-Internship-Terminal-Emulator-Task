@@ -33,6 +33,12 @@ class Screen (
         return firstRow
     }
 
+    fun clear() {
+        fields.forEach {
+            it.clear()
+        }
+    }
+
     fun shiftRightAt(column: Int, row: Int) {
         var index = (height-1) * width + width-1
         while ((index % width) > column || (index / width) > row) {
