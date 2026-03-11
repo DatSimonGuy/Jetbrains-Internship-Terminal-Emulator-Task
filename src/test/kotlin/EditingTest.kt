@@ -38,4 +38,21 @@ class EditingTest {
         buffer.fillLine('a')
         assertContains(buffer.toString(), "a".repeat(width), message = "The line has not been filled properly")
     }
+
+    @Test
+    fun testNewLine() {
+        val width = 20
+        val buffer = TerminalBuffer(width to 10)
+        buffer.fillLine('a')
+        buffer.moveCursor(Direction.DOWN, 1)
+        buffer.fillLine('b')
+        buffer.setCursorPosition(19, 9)
+        buffer.fillLine('c')
+        buffer.addNewLine()
+        assertContains(buffer.toString(), "b".repeat(width), message = "New line deleted two lines instead of one")
+        assert(!buffer.toString().contains("a".repeat(width))) {
+            "The first line has not been deleted after adding a new one"
+        }
+        assertContains(buffer.toString().lines().last(), " ".repeat(width), message = "The new line is not empty")
+    }
 }
