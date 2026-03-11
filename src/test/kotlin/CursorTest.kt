@@ -7,7 +7,7 @@ import kotlin.test.assertFailsWith
 class CursorTest {
     @Test
     fun testScreenBounds() {
-        val buffer = TerminalBuffer(initialSize = 20 to 10)
+        val buffer = TerminalBuffer(screenSize = 20 to 10)
         // Test upper bounds
         buffer.moveCursor(Direction.DOWN, 100)
         buffer.moveCursor(Direction.RIGHT, amount = 100)
@@ -53,7 +53,7 @@ class CursorTest {
 
     @Test
     fun testSetCursor() {
-        val buffer = TerminalBuffer(initialSize = 20 to 10)
+        val buffer = TerminalBuffer(screenSize = 20 to 10)
         assertFailsWith<IllegalArgumentException>(message = "The cursor's column can be set out of bounds") {
             buffer.setCursorPosition(20, 5)
         }

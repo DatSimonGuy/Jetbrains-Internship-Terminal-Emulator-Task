@@ -9,15 +9,15 @@ import com.internship.types.maskToStyles
 import com.internship.types.stylesToMask
 
 class TerminalBuffer(
-    initialSize: Pair<Int, Int> = 80 to 24,
+    screenSize: Pair<Int, Int> = 80 to 24,
     scrollBackSize: Int = 160
 ) {
-    private var size = initialSize.copy()
+    private var size = screenSize.copy()
     private var foreground: TerminalColor = TerminalColor.DEFAULT
     private var background: TerminalColor = TerminalColor.DEFAULT
     private val attributes: MutableMap<TextStyle, Boolean> = TextStyle.entries.associateWith { false }.toMutableMap()
-    private val screen = Screen(initialSize)
-    private val scrollback = Scrollback(scrollBackSize, initialSize.first)
+    private val screen = Screen(screenSize)
+    private val scrollback = Scrollback(scrollBackSize, screenSize.first)
     private var cursorPosition: Pair<Int, Int> = 0 to 0
 
     private val style get() = stylesToMask(attributes.filter { it.value }.map { it.key }, foreground, background)
