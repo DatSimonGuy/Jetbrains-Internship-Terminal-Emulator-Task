@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="CursorTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2026-03-11T17:36:11.158Z" hostname="DATSIMONCOMP" time="0.035">
+  <properties/>
+  <testcase name="testSetCursor()" classname="CursorTest" time="0.035"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
