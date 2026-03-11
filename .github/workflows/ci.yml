@@ -1,0 +1,28 @@
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 24
+          cache: gradle
+
+      - name: Make Gradle executable
+        run: chmod +x ./gradlew
+
+      - name: Build project
+        run: ./gradlew build
+
+      - name: Run tests
+        run: ./gradlew test
