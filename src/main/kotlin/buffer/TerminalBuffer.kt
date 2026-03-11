@@ -71,6 +71,10 @@ class TerminalBuffer(
         moveCursor(Direction.RIGHT, 1)
     }
 
+    fun fillLine(char: Char?) {
+        screen.setLine(cursorPosition.second, char)
+    }
+
     override fun toString(): String {
         return screen.toString()
     }

@@ -23,6 +23,10 @@ class Screen (
         fields[row][column] = value
     }
 
+    fun setLine(row: Int, value: Char?) {
+        fields[row].replaceAll { value }
+    }
+
     fun shiftRightAt(column: Int, row: Int) {
         var index = (height-1) * width + width-1
         while ((index % width) > column || (index / width) > row) {
