@@ -35,7 +35,7 @@ class Screen (
 
     override fun toString(): String {
         return fields.joinToString("\n") { row ->
-            row.joinToString("") { it?.toString() ?: "" }
+            row.joinToString("") { it?.toString() ?: " " }
         }
     }
 }

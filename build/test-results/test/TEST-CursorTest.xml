@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="CursorTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2026-03-11T18:44:48.337Z" hostname="DATSIMONCOMP" time="0.022">
-  <properties/>
-  <testcase name="testScreenBounds()" classname="CursorTest" time="0.022"/>
-  <system-out><![CDATA[]]></system-out>
-  <system-err><![CDATA[]]></system-err>
-</testsuite>
