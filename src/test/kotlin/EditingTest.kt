@@ -6,7 +6,7 @@ import kotlin.test.assertContains
 
 class EditingTest {
     @Test
-    fun TestWrite() {
+    fun testWrite() {
         val buffer = TerminalBuffer()
         buffer.writeTextOnLine('r')
         buffer.moveCursor(Direction.LEFT, 1)
@@ -21,7 +21,7 @@ class EditingTest {
     }
 
     @Test
-    fun TestInsert() {
+    fun testInsert() {
         val buffer = TerminalBuffer()
         val textToWrite = "ołdaceba"
         textToWrite.forEach { c ->
@@ -32,7 +32,7 @@ class EditingTest {
     }
 
     @Test
-    fun TestFill() {
+    fun testFill() {
         val width = 20
         val buffer = TerminalBuffer(width to 10)
         buffer.fillLine('a')
