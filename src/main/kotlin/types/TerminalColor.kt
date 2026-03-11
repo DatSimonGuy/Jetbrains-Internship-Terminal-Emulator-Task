@@ -1,19 +1,27 @@
 package com.internship.types
 
-enum class TerminalColor {
-    DEFAULT,
-    BLACK,
-    DARK_RED,
-    DARK_GREEN,
-    DARK_YELLOW,
-    DARK_BLUE,
-    DARK_CYAN,
-    GRAY,
-    DARK_GRAY,
-    RED,
-    YELLOW,
-    BLUE,
-    MAGENTA,
-    CYAN,
-    WHITE,
+enum class TerminalColor (
+    val colorCode: Int,
+) {
+    BLACK(30),
+    RED(31),
+    GREEN(32),
+    YELLOW(33),
+    BLUE(34),
+    MAGENTA(35),
+    CYAN(36),
+    GRAY(37),
+    DEFAULT(39),
+    DARK_GRAY(90),
+    BRIGHT_RED(91),
+    BRIGHT_GREEN(92),
+    BRIGHT_YELLOW(93),
+    BRIGHT_BLUE(94),
+    BRIGHT_MAGENTA(95),
+    BRIGHT_CYAN(96),
+    WHITE(97);
+
+    fun toMask(type: ColorType): Int {
+        return this.colorCode shl type.bitShift
+    }
 }

@@ -1,7 +1,7 @@
 package com.internship.types
 
 open class CharacterContainer (
-    initialHeight: Int,
+    val initialHeight: Int,
     val initialWidth: Int
 ) {
     protected open val chars: MutableList<MutableList<Char>> = MutableList(initialHeight) { MutableList(initialWidth) { ' ' } }
@@ -12,11 +12,13 @@ open class CharacterContainer (
     }
 
     fun getCharacter(column: Int, row: Int): Char? {
-        return try {
-            chars[row][column]
-        } catch (_: ArrayIndexOutOfBoundsException) {
-            null
-        }
+        return chars.getOrNull(row)?.getOrNull(column)
+    }
+
+    fun getFormatted(column: Int, row: Int): String? {
+        val attrText = maskToAnsi(getAttributes(column, row) ?: return null)
+        val character = chars.getOrNull(row)?.getOrNull(column) ?: return null
+        return "$attrText$character\u001B[0m"
     }
 
     fun getAttributes(column: Int, row: Int): Int? {
@@ -34,7 +36,20 @@ open class CharacterContainer (
 
     override fun toString(): String {
         return chars.joinToString("\n") { row ->
-            row.joinToString("") { it.toString() }
+            row.joinToString("") {
+                it.toString()
+            }
         }
+    }
+
+    fun toFormattedString(): String {
+        val outputStr = StringBuilder()
+        for(row in 0..<initialHeight) {
+            for(col in 0..<initialWidth) {
+                outputStr.append(getFormatted(col, row))
+            }
+            outputStr.append("\n")
+        }
+        return outputStr.toString()
     }
 }

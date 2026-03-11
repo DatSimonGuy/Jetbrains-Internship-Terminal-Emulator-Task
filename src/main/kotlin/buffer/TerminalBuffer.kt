@@ -7,7 +7,6 @@ import com.internship.types.TerminalColor
 import com.internship.types.TextStyle
 import com.internship.types.maskToStyles
 import com.internship.types.stylesToMask
-import java.lang.classfile.Attribute
 
 class TerminalBuffer(
     initialSize: Pair<Int, Int> = 80 to 24,
@@ -21,7 +20,7 @@ class TerminalBuffer(
     private val scrollback = Scrollback(scrollBackSize, initialSize.first)
     private var cursorPosition: Pair<Int, Int> = 0 to 0
 
-    private val style get() = stylesToMask(attributes.filter { it.value }.map { it.key })
+    private val style get() = stylesToMask(attributes.filter { it.value }.map { it.key }, foreground, background)
 
     fun setBackground(color: TerminalColor) {
         background = color
@@ -109,11 +108,11 @@ class TerminalBuffer(
     }
 
     fun getScreen(): String {
-        return screen.toString()
+        return screen.toFormattedString()
     }
 
     fun getScreenAndScrollback(): String {
-        return scrollback.toString() + "\n" + screen.toString()
+        return scrollback.toFormattedString() + "\n" + screen.toFormattedString()
     }
 
     fun clearScreenAndScrollback() {
@@ -121,19 +120,19 @@ class TerminalBuffer(
         scrollback.clear()
     }
 
-    fun getScreenCharacterAtPosition(column: Int, row: Int): Char? {
-        return screen.getCharacter(column, row)
+    fun getScreenCharacterAtPosition(column: Int, row: Int): String? {
+        return screen.getFormatted(column, row)
     }
 
-    fun getScreenAttributesAtPosition(column: Int, row: Int): List<TextStyle> {
+    fun getScreenAttributesAtPosition(column: Int, row: Int): Triple<List<TextStyle>, TerminalColor, TerminalColor> {
         return maskToStyles(screen.getAttributes(column, row) ?: 0)
     }
 
-    fun getScrollbackCharacterAtPosition(column: Int, row: Int): Char? {
-        return scrollback.getCharacter(column, row)
+    fun getScrollbackCharacterAtPosition(column: Int, row: Int): String? {
+        return scrollback.getFormatted(column, row)
     }
 
-    fun getScrollbackAttributesAtPosition(column: Int, row: Int): List<TextStyle> {
+    fun getScrollbackAttributesAtPosition(column: Int, row: Int): Triple<List<TextStyle>, TerminalColor, TerminalColor> {
         return maskToStyles(scrollback.getAttributes(column, row) ?: 0)
     }
 
