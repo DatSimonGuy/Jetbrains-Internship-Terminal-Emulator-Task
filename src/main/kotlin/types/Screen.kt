@@ -17,7 +17,7 @@ class Screen (
         }
     }
 
-    fun getAttribute (column: Int, row: Int): Int? {
+    fun getAttributes (column: Int, row: Int): Int? {
         return try {
             styles[row][column]
         } catch (_: ArrayIndexOutOfBoundsException) {
@@ -58,7 +58,7 @@ class Screen (
         var index = (height-1) * width + width-1
         while ((index % width) > column || (index / width) > row) {
             val prevChar = getCharacter((index-1)%width, (index-1)/width)
-            val prevAttr = getAttribute((index-1)%width, (index-1)/width)
+            val prevAttr = getAttributes((index-1)%width, (index-1)/width)
             setCell(index % width, index / width, prevChar!!, prevAttr!!)
             index -= 1
         }

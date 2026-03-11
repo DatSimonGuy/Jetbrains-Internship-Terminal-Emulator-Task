@@ -5,7 +5,9 @@ import com.internship.types.Screen
 import com.internship.types.Scrollback
 import com.internship.types.TerminalColor
 import com.internship.types.TextStyle
+import com.internship.types.maskToStyles
 import com.internship.types.stylesToMask
+import java.lang.classfile.Attribute
 
 class TerminalBuffer(
     initialSize: Pair<Int, Int> = 80 to 24,
@@ -107,16 +109,16 @@ class TerminalBuffer(
         return screen.getCharacter(column, row)
     }
 
-    fun getScreenAttributesAtPosition(column: Int, row: Int): Int? {
-        return screen.getAttribute(column, row)
+    fun getScreenAttributesAtPosition(column: Int, row: Int): List<TextStyle> {
+        return maskToStyles(screen.getAttributes(column, row) ?: 0)
     }
 
     fun getScrollbackCharacterAtPosition(column: Int, row: Int): Char? {
         return scrollback.getCharacter(column, row)
     }
 
-    fun getScrollbackAttributesAtPosition(column: Int, row: Int): Int? {
-        return scrollback.getAttribute(column, row)
+    fun getScrollbackAttributesAtPosition(column: Int, row: Int): List<TextStyle> {
+        return maskToStyles(scrollback.getAttributes(column, row) ?: 0)
     }
 
     override fun toString(): String {

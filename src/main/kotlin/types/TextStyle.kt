@@ -9,3 +9,8 @@ enum class TextStyle(val mask: Int) {
 fun stylesToMask(styles: List<TextStyle>): Int = styles.fold(0) {
     acc, style -> acc or style.mask
 }
+
+fun maskToStyles(mask: Int): List<TextStyle> =
+    TextStyle.entries.filter { style ->
+        mask and style.mask != 0
+    }

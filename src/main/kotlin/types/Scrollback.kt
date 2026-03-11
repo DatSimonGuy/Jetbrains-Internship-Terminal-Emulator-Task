@@ -22,7 +22,7 @@ class Scrollback(
         }
     }
 
-    fun getAttribute(column: Int, row: Int): Int? {
+    fun getAttributes(column: Int, row: Int): Int? {
         return try {
             styles[row][column]
         } catch (_: ArrayIndexOutOfBoundsException) {
