@@ -11,7 +11,11 @@ class Scrollback(
     }
 
     fun getCharacter(column: Int, row: Int): Char? {
-        return fields[row]?.get(row)
+        return try {
+            fields[row]?.get(row)
+        } catch (_: IndexOutOfBoundsException) {
+            null
+        }
     }
 
     fun clear() {

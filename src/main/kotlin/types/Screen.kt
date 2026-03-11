@@ -11,10 +11,10 @@ class Screen (
     private val fields: MutableList<MutableList<Char>> = MutableList(height) { MutableList(width) { ' ' } }
 
     fun getCharacter(column: Int, row: Int): Char? {
-        try {
-            return fields[row][column]
-        } catch (e: Exception) {
-            return null
+        return try {
+            fields[row][column]
+        } catch (_: ArrayIndexOutOfBoundsException) {
+            null
         }
     }
 
@@ -43,8 +43,7 @@ class Screen (
         var index = (height-1) * width + width-1
         while ((index % width) > column || (index / width) > row) {
             val previousValue = getCharacter((index-1)%width, (index-1)/width)
-            if (previousValue != null)
-                setCharacter(index % width, index / width, previousValue)
+            setCharacter(index % width, index / width, previousValue!!)
             index -= 1
         }
     }
