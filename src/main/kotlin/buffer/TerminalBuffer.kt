@@ -1,8 +1,10 @@
 package com.internship.buffer
 
 import com.internship.types.Direction
+import com.internship.types.Screen
 import com.internship.types.TerminalColor
 import com.internship.types.TextStyle
+import java.util.concurrent.ScheduledExecutorService
 import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
@@ -15,7 +17,7 @@ class TerminalBuffer(
     private var foreground: TerminalColor = TerminalColor.DEFAULT
     private var background: TerminalColor = TerminalColor.DEFAULT
     private val attributes: MutableMap<TextStyle, Boolean> = TextStyle.entries.associateWith { false }.toMutableMap()
-    private val screen: List<MutableList<Char?>> = List(size.second) { MutableList(size.first) { null } }
+    private val screen = Screen(initialSize)
     private val scrollBack: List<String?> = List(scrollBackSize) { null }
     private var cursorPosition: Pair<Int, Int> = 0 to 0
 
@@ -56,5 +58,20 @@ class TerminalBuffer(
         val newRow = newIndex / width
         val newColumn = newIndex % width
         cursorPosition = newColumn to newRow
+    }
+
+    fun writeTextOnLine(char: Char) {
+        screen.setCharacter(cursorPosition.first, cursorPosition.second, char)
+        moveCursor(Direction.RIGHT, 1)
+    }
+
+    fun insertTextOnLine(char: Char) {
+        screen.shiftRightAt(cursorPosition.first, cursorPosition.second)
+        screen.setCharacter(cursorPosition.first, cursorPosition.second, char)
+        moveCursor(Direction.RIGHT, 1)
+    }
+
+    override fun toString(): String {
+        return screen.toString()
     }
 }
