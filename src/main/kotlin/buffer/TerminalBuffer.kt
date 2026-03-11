@@ -1,7 +1,6 @@
 package com.internship.buffer
 
 import com.internship.types.Direction
-import com.internship.types.Element
 import com.internship.types.Screen
 import com.internship.types.Scrollback
 import com.internship.types.TerminalColor
@@ -104,11 +103,20 @@ class TerminalBuffer(
         scrollback.clear()
     }
 
-    fun getCharacterAtPosition(column: Int, row: Int, element: Element): Char? {
-        return when(element) {
-            Element.SCREEN -> screen.getCharacter(column, row)
-            Element.SCROLLBACK -> scrollback.getCharacter(column, row)
-        }
+    fun getScreenCharacterAtPosition(column: Int, row: Int): Char? {
+        return screen.getCharacter(column, row)
+    }
+
+    fun getScreenAttributesAtPosition(column: Int, row: Int): Int? {
+        return screen.getAttribute(column, row)
+    }
+
+    fun getScrollbackCharacterAtPosition(column: Int, row: Int): Char? {
+        return scrollback.getCharacter(column, row)
+    }
+
+    fun getScrollbackAttributesAtPosition(column: Int, row: Int): Int? {
+        return scrollback.getAttribute(column, row)
     }
 
     override fun toString(): String {
