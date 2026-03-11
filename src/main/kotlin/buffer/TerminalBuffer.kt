@@ -96,6 +96,14 @@ class TerminalBuffer(
         scrollback.addLine(line.first, line.second)
     }
 
+    fun getScreenLine(row: Int): String {
+        return screen.getLine(row)
+    }
+
+    fun getScrollbackLine(row: Int): String {
+        return screen.getLine(row)
+    }
+
     fun clearScreen() {
         screen.clear()
     }

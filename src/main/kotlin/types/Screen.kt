@@ -2,28 +2,9 @@ package com.internship.types
 
 class Screen (
     initialSize: Pair<Int, Int>
-) {
+): CharacterContainer(initialSize.second, initialSize.first) {
     private var width = initialSize.first
     private var height = initialSize.second
-
-    private val chars: MutableList<MutableList<Char>> = MutableList(height) { MutableList(width) { ' ' } }
-    private val styles: MutableList<MutableList<Int>> = MutableList(height) { MutableList(width) { 0 } }
-
-    fun getCharacter(column: Int, row: Int): Char? {
-        return try {
-            chars[row][column]
-        } catch (_: ArrayIndexOutOfBoundsException) {
-            null
-        }
-    }
-
-    fun getAttributes (column: Int, row: Int): Int? {
-        return try {
-            styles[row][column]
-        } catch (_: ArrayIndexOutOfBoundsException) {
-            null
-        }
-    }
 
     fun setCell(column: Int, row: Int, char: Char, style: Int) {
         chars[row][column] = char
@@ -43,15 +24,6 @@ class Screen (
         chars.addLast(MutableList(width) { ' ' })
         styles.addLast(MutableList(width) { 0 })
         return firstRow to firstStyles
-    }
-
-    fun clear() {
-        chars.forEach {
-            it.replaceAll { ' ' }
-        }
-        styles.forEach {
-            it.replaceAll { 0 }
-        }
     }
 
     fun shiftRightAt(column: Int, row: Int) {
