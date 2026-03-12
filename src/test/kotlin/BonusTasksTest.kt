@@ -23,4 +23,31 @@ class BonusTasksTest {
             "The screen's height has not been resized properly, expected height 2, but got ${buffer.getCursorPosition().second + 1}"
         }
     }
+
+    @Test
+    fun emojiWriteTest() {
+        val buffer = TerminalBuffer()
+        buffer.writeTextOnLine("👍")
+        assert(buffer.getScreen().contains("👍")) {
+            "The emoji has not been added successfully"
+        }
+        buffer.moveCursor(Direction.LEFT, 1)
+        assert(buffer.getCursorPosition().first == 0) {
+            "The cursor has moved to the middle of an emoji while moving left"
+        }
+        buffer.moveCursor(Direction.RIGHT, 1)
+        assert(buffer.getCursorPosition().first == 2) {
+            "The cursor has moved to the middle of an emoji while moving right"
+        }
+        buffer.moveCursor(Direction.DOWN, 1)
+        buffer.moveCursor(Direction.LEFT, 1)
+        buffer.moveCursor(Direction.UP, 1)
+        assert(buffer.getCursorPosition().first == 0) {
+            "The cursor has moved to the middle of an emoji while moving vertically"
+        }
+        buffer.setCursorPosition(1, 0)
+        assert(buffer.getCursorPosition().first == 0) {
+            "The cursor has moved to the middle of an emoji while setting the position manually"
+        }
+    }
 }

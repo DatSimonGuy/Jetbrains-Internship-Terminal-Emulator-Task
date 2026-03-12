@@ -11,15 +11,8 @@ class Scrollback(
         styles.removeLast()
     }
 
-    override fun toFormattedString(): String {
-        val outputStr = StringBuilder()
-        for(row in 1..height) {
-            for(col in 1..width) {
-                outputStr.append(getFormatted(width - col, height - row))
-            }
-            outputStr.append("\n")
-        }
-        return outputStr.toString()
+    override fun toFormattedString(isReverse: Boolean): String {
+        return super.toFormattedString(true)
     }
 
     override fun resize(newWidth: Int?, newHeight: Int?): Pair<List<MutableList<Char>>, List<MutableList<Int>>> {

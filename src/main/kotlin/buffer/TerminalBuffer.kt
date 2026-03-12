@@ -7,6 +7,7 @@ import com.internship.types.TerminalColor
 import com.internship.types.TextStyle
 import com.internship.types.maskToStyles
 import com.internship.types.stylesToMask
+import java.util.Locale.getDefault
 
 class TerminalBuffer(
     screenSize: Pair<Int, Int> = 80 to 24,
@@ -22,6 +23,10 @@ class TerminalBuffer(
     private val style get() = stylesToMask(attributes.filter { it.value }.map { it.key }, foreground, background)
 
     fun resize(newWidth: Int?, newHeight: Int?) {
+        if (newWidth != null && newWidth < 2) {
+            throw IllegalArgumentException("The terminal window needs to be at least 2 characters wide")
+        }
+
         val (removedChars, removedStyles) = screen.resize(newWidth, newHeight)
         if (newWidth != null && cursorPosition.first > newWidth) {
             cursorPosition = (newWidth-1) to cursorPosition.second
@@ -58,6 +63,9 @@ class TerminalBuffer(
         if (row < 0)
             throw IllegalArgumentException("The row needs to be greater than zero")
         cursorPosition = column to row
+        if (Character.isLowSurrogate(screen.getCharacter(column, row) ?: ' ')) {
+            moveCursor(Direction.LEFT, 1)
+        }
     }
 
     fun getCursorPosition(): Pair<Int, Int> {
@@ -82,27 +90,47 @@ class TerminalBuffer(
         val newRow = newIndex / width
         val newColumn = newIndex % width
         cursorPosition = newColumn to newRow
+
+        if (Character.isLowSurrogate(screen.getCharacter(cursorPosition.first, cursorPosition.second) ?: ' ')) {
+            moveCursor(if (direction == Direction.RIGHT) Direction.RIGHT else Direction.LEFT, 1)
+        }
     }
 
-    fun writeTextOnLine(char: Char) {
-        screen.setCell(
-            cursorPosition.first,
-            cursorPosition.second,
-            char,
-            style
-        )
-        moveCursor(Direction.RIGHT, 1)
+    fun writeTextOnLine(character: String) {
+        if (character.length > 1 && character.lowercase(getDefault()).contains(regex = Regex("[a-z]"))) {
+            throw IllegalArgumentException("The input needs to be a single character or a special symbol/emoji")
+        }
+        if (character.length == 2 && cursorPosition.first == screen.getSize().first - 1) {
+            moveCursor(Direction.RIGHT, 1)
+        }
+        for (char in character) {
+            screen.setCell(
+                cursorPosition.first,
+                cursorPosition.second,
+                char,
+                style
+            )
+            moveCursor(Direction.RIGHT, 1)
+        }
     }
 
-    fun insertTextOnLine(char: Char) {
-        screen.shiftRightAt(cursorPosition.first, cursorPosition.second)
-        screen.setCell(
-            cursorPosition.first,
-            cursorPosition.second,
-            char,
-            style
-        )
-        moveCursor(Direction.RIGHT, 1)
+    fun insertTextOnLine(character: String) {
+        if (character.length > 1 && character.lowercase(getDefault()).contains(regex = Regex("[a-z]"))) {
+            throw IllegalArgumentException("The input needs to be a single character or a special symbol/emoji")
+        }
+        if (character.length == 2 && cursorPosition.first == screen.getSize().first - 1) {
+            moveCursor(Direction.LEFT, 1)
+        }
+        for (char in character) {
+            screen.shiftRightAt(cursorPosition.first, cursorPosition.second)
+            screen.setCell(
+                cursorPosition.first,
+                cursorPosition.second,
+                char,
+                style
+            )
+            moveCursor(Direction.RIGHT, 1)
+        }
     }
 
     fun fillLine(char: Char) {

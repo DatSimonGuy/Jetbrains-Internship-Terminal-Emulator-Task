@@ -8,11 +8,11 @@ class EditingTest {
     @Test
     fun writeTextTest() {
         val buffer = TerminalBuffer()
-        buffer.writeTextOnLine('r')
+        buffer.writeTextOnLine("r")
         buffer.moveCursor(Direction.LEFT, 1)
         val textToWrite = "abecadło"
         textToWrite.forEach { c ->
-            buffer.writeTextOnLine(c)
+            buffer.writeTextOnLine(c.toString())
         }
         assertContains(buffer.toString(), "abecadło", message = "The buffer write failed")
         assert(!buffer.toString().contains("r")) {
@@ -25,7 +25,7 @@ class EditingTest {
         val buffer = TerminalBuffer()
         val textToWrite = "ołdaceba"
         textToWrite.forEach { c ->
-            buffer.insertTextOnLine(c)
+            buffer.insertTextOnLine(c.toString())
             buffer.moveCursor(Direction.LEFT, 1)
         }
         assertContains(buffer.toString(), "abecadło", message = "The buffer insertion failed")

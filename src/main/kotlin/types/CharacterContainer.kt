@@ -43,12 +43,6 @@ abstract class CharacterContainer (
         return chars.getOrNull(row)?.getOrNull(column)
     }
 
-    fun getFormatted(column: Int, row: Int): String? {
-        val attrText = maskToAnsi(getAttributes(column, row) ?: return null)
-        val character = chars.getOrNull(row)?.getOrNull(column) ?: return null
-        return "$attrText$character\u001B[0m"
-    }
-
     fun getAttributes(column: Int, row: Int): Int? {
         return try {
             styles[row][column]
@@ -70,14 +64,34 @@ abstract class CharacterContainer (
         }
     }
 
-    open fun toFormattedString(): String {
-        val outputStr = StringBuilder()
-        for(row in 0..<height) {
-            for(col in 0..<width) {
-                outputStr.append(getFormatted(col, row))
+    open fun toFormattedString(isReverse: Boolean = false): String {
+        val output = StringBuilder()
+
+        val range = if(isReverse) (0 ..< height).reversed() else (0 ..< height)
+        for (row in range) {
+            var col = if(isReverse) width-1 else 0
+            while (if (isReverse) col >= 0 else col < width) {
+                val char = getCharacter(col, row) ?: ' '
+                val attr = getAttributes(col, row) ?: 0
+
+                if (Character.isHighSurrogate(char) && col + 1 < width) {
+                    val next = getCharacter(col + 1, row)
+                    if (next != null && Character.isLowSurrogate(next)) {
+                        val combined = String(charArrayOf(char, next))
+                        output.append(combined)
+                        col += 2
+                        continue
+                    }
+                }
+
+                output.append(maskToAnsi(attr))
+                output.append(char)
+                output.append("\u001B[0m")
+                col += if (isReverse) -1 else 1
             }
-            outputStr.append("\n")
+            if (row < height - 1) output.append("\n")
         }
-        return outputStr.toString()
+
+        return output.toString()
     }
 }

@@ -11,13 +11,13 @@ class ContentAccessTest {
     fun getCharacterAtPositionTest() {
         val buffer = TerminalBuffer(80 to 25)
         buffer.setCursorPosition(20, 20)
-        buffer.writeTextOnLine('a')
+        buffer.writeTextOnLine("a")
         val char1 = buffer.getScreenCharacterAtPosition(20, 20)
         assert(char1 == 'a') {
             "Wrong character has been returned from screen, expected 'a', but got '${char1}'"
         }
         buffer.setCursorPosition(5, 0)
-        buffer.writeTextOnLine('b')
+        buffer.writeTextOnLine("b")
         buffer.addNewLine()
         val char2 = buffer.getScrollbackCharacterAtPosition(5, 0)
         assert(char2 == 'b') {
@@ -32,7 +32,7 @@ class ContentAccessTest {
         buffer.setForeground(TerminalColor.WHITE)
         buffer.setBackground(TerminalColor.BLUE)
         buffer.setCursorPosition(20, 20)
-        buffer.writeTextOnLine('x')
+        buffer.writeTextOnLine("x")
         val attrs1 = buffer.getScreenAttributesAtPosition(20, 20)
         assert(attrs1.first.contains(TextStyle.BOLD) && attrs1.second == TerminalColor.WHITE && attrs1.third == TerminalColor.BLUE) {
             "Style changes have not been applied on screen during character insertion"
@@ -41,7 +41,7 @@ class ContentAccessTest {
         buffer.setForeground(TerminalColor.YELLOW)
         buffer.setBackground(TerminalColor.GREEN)
         buffer.setCursorPosition(5, 0)
-        buffer.writeTextOnLine('x')
+        buffer.writeTextOnLine("x")
         buffer.addNewLine()
         val attrs2 = buffer.getScrollbackAttributesAtPosition(5, 0)
         assert(attrs2.first.contains(TextStyle.UNDERLINE) && attrs2.second == TerminalColor.YELLOW && attrs2.third == TerminalColor.GREEN) {
@@ -73,9 +73,9 @@ class ContentAccessTest {
         val buffer = TerminalBuffer(6 to 6)
         buffer.setForeground(TerminalColor.RED)
         buffer.moveCursor(Direction.DOWN, 1)
-        buffer.insertTextOnLine('t')
+        buffer.insertTextOnLine("t")
         buffer.setCursorPosition(5, 5)
-        buffer.insertTextOnLine('6')
+        buffer.insertTextOnLine("6")
         val screen = buffer.getScreen()
         assertContains(screen, ("\u001B[31;49m6\u001B[0m"), message = "The screen display is incomplete")
         assertContains(screen, ("\u001B[31;49mt\u001B[0m"), message = "The screen display is incomplete")
@@ -85,12 +85,12 @@ class ContentAccessTest {
     fun getEntireScreenAndScrollbackTest() {
         val buffer = TerminalBuffer(6 to 6, 6)
         buffer.setForeground(TerminalColor.RED)
-        buffer.insertTextOnLine('t')
+        buffer.insertTextOnLine("t")
         repeat(5) {
             buffer.addNewLine()
         }
         buffer.setCursorPosition(5, 5)
-        buffer.insertTextOnLine('6')
+        buffer.insertTextOnLine("6")
         val screen = buffer.getScreenAndScrollback()
         assertContains(screen, ("\u001B[31;49m6\u001B[0m"), message = "The screen and scrollback display is incomplete")
         assertContains(screen, ("\u001B[31;49mt\u001B[0m"), message = "The screen and scrollback display is incomplete")
