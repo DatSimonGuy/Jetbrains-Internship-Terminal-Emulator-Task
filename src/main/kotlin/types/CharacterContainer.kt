@@ -42,7 +42,7 @@ open class CharacterContainer (
         }
     }
 
-    fun toFormattedString(): String {
+    open fun toFormattedString(): String {
         val outputStr = StringBuilder()
         for(row in 0..<initialHeight) {
             for(col in 0..<initialWidth) {

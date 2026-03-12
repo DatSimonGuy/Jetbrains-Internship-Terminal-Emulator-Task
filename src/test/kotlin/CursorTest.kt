@@ -10,13 +10,13 @@ class CursorTest {
         val buffer = TerminalBuffer(screenSize = 20 to 10)
         // Test upper bounds
         buffer.moveCursor(Direction.DOWN, 100)
-        buffer.moveCursor(Direction.RIGHT, amount = 100)
+        buffer.moveCursor(Direction.RIGHT, amount = 101)
         val pos1 = buffer.getCursorPosition()
         assert(pos1.second == 9) {
-            "The cursor has gone out of bounds on the rows axis, expected position 9, but got ${pos1.second}"
+            "The cursor wrap has resulted in invalid position, expected 9, but got ${pos1.second}"
         }
-        assert(pos1.first == 19) {
-            "The cursor has gone out of bounds on the rows axis, expected position 19, but got ${pos1.first}"
+        assert(pos1.first == 1) {
+            "The cursor wrap has resulted in invalid position, expected 1, but got ${pos1.first}"
         }
         // Test lower bounds
         buffer.moveCursor(Direction.UP, 100)

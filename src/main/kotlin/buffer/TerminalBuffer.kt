@@ -55,7 +55,15 @@ class TerminalBuffer(
         val height = size.second
         val index = cursorPosition.second * width + cursorPosition.first
         val delta = direction.rMod * width * amount + direction.cMod * amount
-        val newIndex = (index + delta).coerceIn(0, width * height - 1)
+        var newIndex = index + delta
+
+        while (newIndex >= width * height) {
+            addNewLine()
+            newIndex -= width
+        }
+
+        newIndex = newIndex.coerceAtLeast(0)
+
         val newRow = newIndex / width
         val newColumn = newIndex % width
         cursorPosition = newColumn to newRow
@@ -112,7 +120,7 @@ class TerminalBuffer(
     }
 
     fun getScreenAndScrollback(): String {
-        return scrollback.toFormattedString() + "\n" + screen.toFormattedString()
+        return scrollback.toFormattedString() + screen.toFormattedString()
     }
 
     fun clearScreenAndScrollback() {

@@ -72,6 +72,7 @@ class ContentAccessTest {
     fun getEntireScreenTest() {
         val buffer = TerminalBuffer(6 to 6)
         buffer.setForeground(TerminalColor.RED)
+        buffer.moveCursor(Direction.DOWN, 1)
         buffer.insertTextOnLine('t')
         buffer.setCursorPosition(5, 5)
         buffer.insertTextOnLine('6')
@@ -85,14 +86,14 @@ class ContentAccessTest {
         val buffer = TerminalBuffer(6 to 6, 6)
         buffer.setForeground(TerminalColor.RED)
         buffer.insertTextOnLine('t')
-        repeat(6) {
+        repeat(5) {
             buffer.addNewLine()
         }
         buffer.setCursorPosition(5, 5)
         buffer.insertTextOnLine('6')
         val screen = buffer.getScreenAndScrollback()
         assertContains(screen, ("\u001B[31;49m6\u001B[0m"), message = "The screen and scrollback display is incomplete")
-        assertContains(screen, ("\u001B[31;49mt\u001B[0m"), message = "The screen and scrollback scrollback display is incomplete")
+        assertContains(screen, ("\u001B[31;49mt\u001B[0m"), message = "The screen and scrollback display is incomplete")
     }
 
 }
