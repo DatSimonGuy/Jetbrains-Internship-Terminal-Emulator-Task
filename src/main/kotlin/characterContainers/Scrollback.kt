@@ -1,4 +1,4 @@
-package com.internship.types
+package com.internship.CharacterContainers
 
 class Scrollback(
     initialSize: Int,

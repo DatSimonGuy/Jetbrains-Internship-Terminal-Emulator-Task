@@ -1,4 +1,6 @@
-package com.internship.types
+package com.internship.CharacterContainers
+
+import com.internship.types.maskToAnsi
 
 abstract class CharacterContainer (
     initialHeight: Int,

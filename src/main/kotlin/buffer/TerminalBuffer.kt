@@ -1,8 +1,8 @@
 package com.internship.buffer
 
 import com.internship.types.Direction
-import com.internship.types.Screen
-import com.internship.types.Scrollback
+import com.internship.CharacterContainers.Screen
+import com.internship.CharacterContainers.Scrollback
 import com.internship.types.TerminalColor
 import com.internship.types.TextStyle
 import com.internship.types.maskToStyles
