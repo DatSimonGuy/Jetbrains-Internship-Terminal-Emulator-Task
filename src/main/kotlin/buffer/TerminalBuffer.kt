@@ -12,7 +12,6 @@ class TerminalBuffer(
     screenSize: Pair<Int, Int> = 80 to 24,
     scrollBackSize: Int = 160
 ) {
-    private var size = screenSize.copy()
     private var foreground: TerminalColor = TerminalColor.DEFAULT
     private var background: TerminalColor = TerminalColor.DEFAULT
     private val attributes: MutableMap<TextStyle, Boolean> = TextStyle.entries.associateWith { false }.toMutableMap()
@@ -24,6 +23,12 @@ class TerminalBuffer(
 
     fun resize(newWidth: Int?, newHeight: Int?) {
         val (removedChars, removedStyles) = screen.resize(newWidth, newHeight)
+        if (newWidth != null && cursorPosition.first > newWidth) {
+            cursorPosition = (newWidth-1) to cursorPosition.second
+        }
+        if (newHeight != null && cursorPosition.second > newHeight) {
+            cursorPosition = cursorPosition.first to (newHeight - 1)
+        }
         for (i in 0..<removedChars.size) {
             scrollback.addLine(removedChars[i], removedStyles[i])
         }
@@ -43,6 +48,7 @@ class TerminalBuffer(
     }
 
     fun setCursorPosition(column: Int, row: Int) {
+        val size = screen.getSize()
         if (column >= size.first)
             throw IllegalArgumentException("The column is out of bounds for screen with size of ${size.first} by ${size.second}")
         if (row >= size.second)
@@ -59,6 +65,7 @@ class TerminalBuffer(
     }
 
     fun moveCursor(direction: Direction, amount: Int) {
+        val size = screen.getSize()
         val width = size.first
         val height = size.second
         val index = cursorPosition.second * width + cursorPosition.first

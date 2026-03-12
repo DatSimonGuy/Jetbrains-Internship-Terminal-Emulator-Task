@@ -12,7 +12,7 @@ class Screen (
 
         val newCapacity = (newWidth ?: width) * (newHeight ?: height)
 
-        if (flatChars.size > newCapacity) {
+        while (flatChars.size > newCapacity) {
             removedLines.add(flatChars.subList(0, width).toMutableList())
             removedStyles.add(flatStyles.subList(0, width).toMutableList())
             flatChars.subList(0, width).clear()

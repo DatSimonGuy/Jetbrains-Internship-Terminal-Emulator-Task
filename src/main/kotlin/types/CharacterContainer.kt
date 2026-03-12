@@ -1,8 +1,8 @@
 package com.internship.types
 
 abstract class CharacterContainer (
-    val initialHeight: Int,
-    val initialWidth: Int
+    initialHeight: Int,
+    initialWidth: Int
 ) {
     protected open val chars: MutableList<MutableList<Char>> = MutableList(initialHeight) { MutableList(initialWidth) { ' ' } }
     protected open val styles: MutableList<MutableList<Int>> = MutableList(initialHeight) { MutableList(initialWidth) { 0 } }
@@ -12,8 +12,12 @@ abstract class CharacterContainer (
 
     abstract fun resize(newWidth: Int?, newHeight: Int?): Pair<List<MutableList<Char>>, List<MutableList<Int>>>
 
+    fun getSize(): Pair<Int, Int> {
+        return width to height
+    }
+
     fun fillArrays(newWidth: Int, newHeight: Int, flatChars: MutableList<Char>, flatStyles: MutableList<Int>) {
-        val newCapacity = width * height
+        val newCapacity = newWidth * newHeight
 
         while (flatChars.size < newCapacity) flatChars.add(' ')
         while (flatStyles.size < newCapacity) flatStyles.add(0)
