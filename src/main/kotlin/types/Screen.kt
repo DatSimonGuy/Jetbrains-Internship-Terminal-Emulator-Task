@@ -3,8 +3,27 @@ package com.internship.types
 class Screen (
     initialSize: Pair<Int, Int>
 ): CharacterContainer(initialSize.second, initialSize.first) {
-    private var width = initialSize.first
-    private var height = initialSize.second
+
+    override fun resize(newWidth: Int?, newHeight: Int?): Pair<List<MutableList<Char>>, List<MutableList<Int>>> {
+        val flatChars = chars.flatten().toMutableList()
+        val flatStyles = styles.flatten().toMutableList()
+        val removedLines = mutableListOf<MutableList<Char>>()
+        val removedStyles = mutableListOf<MutableList<Int>>()
+
+        val newCapacity = (newWidth ?: width) * (newHeight ?: height)
+
+        if (flatChars.size > newCapacity) {
+            removedLines.add(flatChars.subList(0, width).toMutableList())
+            removedStyles.add(flatStyles.subList(0, width).toMutableList())
+            flatChars.subList(0, width).clear()
+            flatStyles.subList(0, width).clear()
+            addLine()
+        }
+
+        super.fillArrays(newWidth ?: width, newHeight ?: height, flatChars, flatStyles)
+
+        return Pair(removedLines, removedStyles)
+    }
 
     fun setCell(column: Int, row: Int, char: Char, style: Int) {
         chars[row][column] = char

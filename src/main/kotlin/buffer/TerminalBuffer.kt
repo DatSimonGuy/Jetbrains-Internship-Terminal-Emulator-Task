@@ -22,6 +22,14 @@ class TerminalBuffer(
 
     private val style get() = stylesToMask(attributes.filter { it.value }.map { it.key }, foreground, background)
 
+    fun resize(newWidth: Int?, newHeight: Int?) {
+        val (removedChars, removedStyles) = screen.resize(newWidth, newHeight)
+        for (i in 0..<removedChars.size) {
+            scrollback.addLine(removedChars[i], removedStyles[i])
+        }
+        scrollback.resize(newWidth, null)
+    }
+
     fun setBackground(color: TerminalColor) {
         background = color
     }
